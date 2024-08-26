@@ -1,0 +1,714 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ファイルシステムの操作</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="33057049-7856-47d5-8d7e-f9308d9d3023" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="icons8-powershell-240%2014.png"/></div><h1 class="page-title">ファイルシステムの操作</h1><p class="page-description"></p></header><div class="page-body"><ul id="2848f35f-fcb0-4936-a2a5-315f0038bd1e" class="bulleted-list"><li style="list-style-type:disc">ファイル/フォルダの作成<ul id="c37844f6-04f6-482c-9e8a-ac7289912d9c" class="bulleted-list"><li style="list-style-type:circle">構文：New-Item &lt;ファイルパス&gt; -ItemType &lt;File or Directory&gt; [-Force] [-Value value]<ul id="e66695c4-12c9-49c3-a648-b7baef789b62" class="bulleted-list"><li style="list-style-type:square">-Force<ul id="3a303abf-efae-40e3-93ce-1fc4e48bccb0" class="bulleted-list"><li style="list-style-type:disc">ファイルが既に存在する場合は、上書きする</li></ul><ul id="b9b20ed4-7b92-4cc2-8888-5f63fb41356c" class="bulleted-list"><li style="list-style-type:disc">パスが存在しない場合は、ディレクトリを作成する。</li></ul></li></ul><ul id="e9130649-8ffe-4740-abe4-ce318d9d8c5a" class="bulleted-list"><li style="list-style-type:square">-Value<ul id="104a0f76-c0dc-4394-a803-929b6232e66a" class="bulleted-list"><li style="list-style-type:disc">ファイルに指定した文字列を書き込む</li></ul></li></ul></li></ul></li></ul><ul id="90843440-807d-46a7-8174-c4eac1ccc91f" class="bulleted-list"><li style="list-style-type:disc">ファイルのコピー<ul id="75efe6ad-704c-43da-b860-668cec4d7676" class="bulleted-list"><li style="list-style-type:circle">構文：Copy-Item &lt;コピー元ファイル&gt; &lt;コピー元ファイル&gt; [-Force] [-Include &lt;*.ファイル名&gt;] [-Exclude &lt;*.ファイル名&gt;]<ul id="74ab1e1f-8cb9-4c1b-8923-fb7337bb70f1" class="bulleted-list"><li style="list-style-type:square">-Include<ul id="502a81e4-b09e-4e3d-9425-3f6b485aacb5" class="bulleted-list"><li style="list-style-type:disc">ファイルの指定に*(ワイルドカード)を指定してコピーできる。</li></ul></li></ul><ul id="a787e31d-5419-4d94-b48d-2828852126dc" class="bulleted-list"><li style="list-style-type:square">-Exclude<ul id="d47ec663-65f1-426b-9a95-075629912f18" class="bulleted-list"><li style="list-style-type:disc">-Includeの逆で、ファイルの指定に*(ワイルドカード)を指定して、一致しないファイルをコピーできる。</li></ul></li></ul></li></ul></li></ul><ul id="e9d7e408-bf93-4d3c-ba4b-43a5cfe208d5" class="bulleted-list"><li style="list-style-type:disc">フォルダのコピー<ul id="9221295f-a799-43b9-9326-88f1ebdc98c4" class="bulleted-list"><li style="list-style-type:circle">構文：Copy-Item &lt;コピー元フォルダ&gt; &lt;コピー先フォルダ&gt; [-Force] [-Recurse]<ul id="6cd7f16e-038c-441c-a192-b09d7f3f52eb" class="bulleted-list"><li style="list-style-type:square">-Recurse<ul id="2b9389eb-3752-40b8-a115-a01bc212a134" class="bulleted-list"><li style="list-style-type:disc">フォルダの中身を再帰的にコピーする</li></ul></li></ul><ul id="46acac91-4c4b-418d-aaae-d4a22c9df126" class="bulleted-list"><li style="list-style-type:square">※注意点<ul id="a32af8b1-8e36-4d73-8cec-bb248161ced6" class="bulleted-list"><li style="list-style-type:disc">&lt;コピー先フォルダ&gt;が存在しない場合、フォルダの作成になる。<ul id="5491819c-13af-4c5b-a77d-8a03e6fdd6fa" class="bulleted-list"><li style="list-style-type:circle">-Forceと-Recurseのオプションを付けて実行するのが無難。</li></ul></li></ul></li></ul></li></ul></li></ul><ul id="b33f41cd-7e75-40b4-8cdd-c329545a15ec" class="bulleted-list"><li style="list-style-type:disc">ファイル/フォルダの削除<ul id="a8305403-3315-46a0-b27e-73c72e14e775" class="bulleted-list"><li style="list-style-type:circle">構文：Remove-Item &lt;削除ファイル or 削除フォルダ&gt; [-Force] [-Recurse]<ul id="da18d5b6-8f96-4ffb-a78e-7e686422754a" class="bulleted-list"><li style="list-style-type:square">-Force<ul id="37e045c3-cbe3-4959-b105-9f5f582a1584" class="bulleted-list"><li style="list-style-type:disc">読み取り専用ファイルを削除するときに指定する</li></ul></li></ul><ul id="905f8c48-c0bd-43f8-b5e0-eaabdd9fbbf1" class="bulleted-list"><li style="list-style-type:square">-Recurse<ul id="57c6ea91-07ad-4780-b9c0-a2cf885f15be" class="bulleted-list"><li style="list-style-type:disc">フォルダを削除する場合に指定する。指定しない場合、フォルダを再帰的に削除するか確認される</li></ul></li></ul></li></ul></li></ul><ul id="dcc6d3f7-9c01-48f7-a8bc-f62c588fc3a0" class="bulleted-list"><li style="list-style-type:disc">ファイル/フォルダを検索する<ul id="92cbd99d-582a-4a4b-aa9a-0d271e2a45a8" class="bulleted-list"><li style="list-style-type:circle">構文：Resolve-Path &lt;ファイルパス or フォルダパス&gt;</li></ul><ul id="19940aa5-3fe0-4ad8-aadc-6b39b7a6ee29" class="bulleted-list"><li style="list-style-type:circle">説明：Get-ChildItemとの違いは、取得結果がフルパスで取れる。<br/>*(ワイルドカード)も使える<br/></li></ul></li></ul><ul id="b01ea6a4-9b27-4732-a6bc-933f7a8da702" class="bulleted-list"><li style="list-style-type:disc">ファイルの作成日時/最終更新日時/最終アクセス日時の取得<ul id="724d7ac7-be8b-4984-a1cb-2df952de2d78" class="bulleted-list"><li style="list-style-type:circle">System.IO.FileInfoクラスの以下のプロパティから取得できる<ul id="79c7d362-aa95-4d83-9515-acc9d1b9af5e" class="bulleted-list"><li style="list-style-type:square">作成日時：CreationTime</li></ul><ul id="58ceeed0-9054-475b-ad3d-f8f85af5d101" class="bulleted-list"><li style="list-style-type:square">最終更新日時：LastWriteTime</li></ul><ul id="898ab589-2c1e-4a1d-8ff5-71aef43c8660" class="bulleted-list"><li style="list-style-type:square">最終アクセス日時：LastAccessTime</li></ul></li></ul><ul id="8791a60a-a4e8-47f7-ab88-fbcb5ea4fa45" class="bulleted-list"><li style="list-style-type:circle">実行例<figure id="47ff7c2a-e165-4ba9-ab90-dbc3dc1bd7a8" class="image"><a href="image%2041.png"><img style="width:1070px" src="image%2041.png"/></a></figure></li></ul><ul id="a1eaef1e-6ff6-46cf-8caa-8e74ced15ae0" class="bulleted-list"><li style="list-style-type:circle">ワンライナーで取得（構文はあっているかわからない）<ul id="88ae8050-a6d4-4f2e-b2ed-601b4a1503ce" class="bulleted-list"><li style="list-style-type:square"> Get-ChildItem C:\Users\hirok\!work\powerShell\test.txt | Select-Object {$<em>.CreationTime, $</em>.LastWriteTime, $_.LastAccessTime}<figure id="1067f6e2-eaeb-44ea-9fb9-81b935e19603" class="image"><a href="image%2042.png"><img style="width:399px" src="image%2042.png"/></a></figure></li></ul></li></ul></li></ul><ul id="0f08ed91-0772-4301-b4d0-e1e9c1a90c25" class="bulleted-list"><li style="list-style-type:disc">ファイルを起動する<ul id="825a1127-b21a-4de7-abe0-be3339a28851" class="bulleted-list"><li style="list-style-type:circle">Invoke-Item &lt;ファイル名&gt;<ul id="0b8e844b-cd8c-42d0-b17c-be40d5565988" class="bulleted-list"><li style="list-style-type:square">ワイルドカードを使って複数のファイルを同時に起動できる。</li></ul></li></ul></li></ul><ul id="b5bdedcd-f028-4b3a-b454-36c05d7cf67d" class="bulleted-list"><li style="list-style-type:disc">ファイル内の文字列を検索する<ul id="24c981c7-ce55-4219-a9f3-917ff5c2c531" class="bulleted-list"><li style="list-style-type:circle">構文：Select-String &lt;検索文字列&gt; &lt;ファイル名&gt;<ul id="4848a9d3-3ca7-4229-a50b-8a02f9c26062" class="bulleted-list"><li style="list-style-type:square">&lt;検索文字列&gt;は正規表現による指定が可能。</li></ul><ul id="21784493-49a5-4a13-9e08-9627f957c191" class="bulleted-list"><li style="list-style-type:square">&lt;ファイル名&gt;は*(ワイルドカード)による指定が可能。</li></ul><figure id="beb6ef61-7439-4769-97c2-556e5358bb39" class="image"><a href="image%2043.png"><img style="width:847px" src="image%2043.png"/></a></figure></li></ul></li></ul><ul id="c3f9dd6b-6341-4b77-8916-17f0be6d3010" class="bulleted-list"><li style="list-style-type:disc">ファイルパスが存在するか確認する<ul id="432579f3-1db8-42c2-aa0b-d79d83659bc0" class="bulleted-list"><li style="list-style-type:circle">構文：Test-Path &lt;パス&gt; [-pathtype Container or Leaf]<ul id="cb285c61-f9cf-4f37-8371-fe68946eb40f" class="bulleted-list"><li style="list-style-type:square">-pathtype<ul id="79f9387e-f612-48b5-97a8-e32880e67e1e" class="bulleted-list"><li style="list-style-type:disc">ファイルの場合は「Leaf」</li></ul><ul id="13205f16-c4cb-4531-932b-02ad48a3c1c2" class="bulleted-list"><li style="list-style-type:disc">フォルダの場合は「Container」</li></ul></li></ul><ul id="f5bedb0c-123b-4fd2-ae3c-e083cfd0be1c" class="bulleted-list"><li style="list-style-type:square">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="59879396-ee85-4511-820c-ecf1899f1072" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; Test-Path C:\Users\hirok\!work\powerShell -PathType Container
+True
+PS C:\Users\hirok\!work\powerShell&gt; Test-Path C:\Users\hirok\!work\powerShell\hoge.txt -PathType Leaf
+False
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul></li></ul><ul id="b178c49b-a65c-4a3e-87a4-eae9cf1e3a77" class="bulleted-list"><li style="list-style-type:disc">パスからフォルダ名やファイル名を取得する<ul id="b6fec44c-8d72-4b86-a390-422fefd2a4d6" class="bulleted-list"><li style="list-style-type:circle">構文：Split-Path &lt;パス&gt; [pathtype]<ul id="f519ba06-5bdc-4281-be3e-23058207d247" class="bulleted-list"><li style="list-style-type:square">pathtypeは以下が指定可能<table id="67409da0-627d-48cd-aca7-06cc85ce1753" class="simple-table"><tbody><tr id="9d24436e-92d5-49c4-a1d5-5bf122b1befa"><td id="Kn~s" class="">-Qualifier</td><td id="MmjT" class="">ドライブ名</td></tr><tr id="36872e56-97c1-46ce-a40b-6a574ce0191d"><td id="Kn~s" class="">-noQualifier</td><td id="MmjT" class="">ドライブ名を除いた部分</td></tr><tr id="8d598a0f-946e-4296-8440-e3108a2d6a54"><td id="Kn~s" class="">-Parent</td><td id="MmjT" class="">親フォルダ</td></tr><tr id="b7b6cb01-232b-4d0e-b599-872e29ab6f88"><td id="Kn~s" class="">-Leaf</td><td id="MmjT" class="">末端の要素</td></tr></tbody></table></li></ul><ul id="54cd6bf6-aba5-4182-9386-262d3ebe7cc3" class="bulleted-list"><li style="list-style-type:square">pathtypeを省略した場合は「-Parent」と同様の動作をする</li></ul></li></ul><ul id="164d4717-13df-41aa-8ad9-08ecb58c45e6" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="06f05d46-a38d-4a09-8a3f-5ac61bcf1f86" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; Split-Path C:\Users\hirok\!work\powerShell\test01.txt
+C:\Users\hirok\!work\powerShell
+PS C:\Users\hirok\!work\powerShell&gt; Split-Path C:\Users\hirok\!work\powerShell\test01.txt -Parent
+C:\Users\hirok\!work\powerShell
+PS C:\Users\hirok\!work\powerShell&gt; Split-Path C:\Users\hirok\!work\powerShell\test01.txt -Leaf
+test01.txt
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul><ul id="ff068f7e-c888-417d-89de-8de84c52830f" class="bulleted-list"><li style="list-style-type:disc">パスを結合する<ul id="55f2dcb3-0b68-4abe-9a2b-70db87817d1e" class="bulleted-list"><li style="list-style-type:circle">構文：Join-Path パス1 パス2 [-Resolve]<ul id="6669942a-ddee-45b9-a12a-077b52f7af14" class="bulleted-list"><li style="list-style-type:square">-Resolve<ul id="cb2034cd-76b9-4d48-bcf1-fe22ff2dfa28" class="bulleted-list"><li style="list-style-type:disc">パスが存在する場合のみ結果を返す。</li></ul><ul id="8f994e8b-589f-474e-8309-68ccf10aade1" class="bulleted-list"><li style="list-style-type:disc">ワイルドカードと組み合わせると便利。</li></ul><ul id="05d4a365-791c-4aa4-b680-5d80b30d224b" class="bulleted-list"><li style="list-style-type:disc">補足<ul id="db6f47b5-202c-4652-83ba-0496f50c4e40" class="bulleted-list"><li style="list-style-type:circle">Resolve-Pathコマンドレットもワイルドカードを使用してファイル検索ができるが、戻り値がSystem.String型である。<br/>Join-Pathコマンドレットは、PathInfo配列である。<br/></li></ul></li></ul></li></ul></li></ul><ul id="84150cc0-1733-4fd5-b4a5-4a80482d366d" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="613f7305-db44-4d58-90bc-045dabfde6da" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; Join-Path C:\Users\hirok\!work powerShell
+C:\Users\hirok\!work\powerShell
+PS C:\Users\hirok\!work\powerShell&gt; Join-Path C:\Users\hirok\!work\powerShell *.txt -Resolve
+C:\Users\hirok\!work\powerShell\test01.txt
+C:\Users\hirok\!work\powerShell\test02.txt
+C:\Users\hirok\!work\powerShell\test03.txt
+C:\Users\hirok\!work\powerShell\test04.txt
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul><ul id="015746ca-cad7-4a5f-9ef7-f1ced51c65e9" class="bulleted-list"><li style="list-style-type:disc">相対パスを絶対パスに変換する<ul id="ad2dd8c1-3327-4e48-9adb-c8c1cff6049a" class="bulleted-list"><li style="list-style-type:circle">Convert-Path &lt;パス&gt;</li></ul><ul id="35bdfe1e-ee6b-43c0-b611-c72ecc5c0fd1" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="53aba533-7685-4efe-b9be-f4b7eea4446d" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; Convert-Path ./..
+C:\Users\hirok\!work
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul><ul id="9cb5250a-6b90-4517-b961-214006a7efc7" class="bulleted-list"><li style="list-style-type:disc">拡張子を変更したファイル名を取得する。<ul id="91fbb5b0-3d65-4663-8a65-5fe65dcd1d4e" class="bulleted-list"><li style="list-style-type:circle">構文：[System.IO.Path]::ChangeExtension(”パス”, “.拡張子“)<ul id="22421248-f404-4e22-b7ba-31f1abafde5c" class="bulleted-list"><li style="list-style-type:square">あくまで拡張子を変更したファイル名を取得するだけ。実際のファイルのファイル名を変更はしない。</li></ul></li></ul><ul id="a78703df-842d-41e7-a084-562dd46f7eb8" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1cef0498-2271-4aaf-8211-6420dbea7ae4" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; [System.IO.Path]::ChangeExtension(&quot;C:\Users\hirok\!work\powerShell\test01.txt&quot;, &quot;.pdf&quot;)
+C:\Users\hirok\!work\powerShell\test01.pdf
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul><ul id="bdfb5315-edef-40d6-8cc9-9e19520e98e2" class="bulleted-list"><li style="list-style-type:disc">特殊フォルダ（「ドキュメント」や「デスクトップ」など）のパスを取得する<ul id="13651569-455c-498b-a4ff-df0b2460b888" class="bulleted-list"><li style="list-style-type:circle">構文：[Environment]::GetFolderPath([Environment+SpecialFolder]::&lt;フォルダタイプ(列挙型)&gt;)<ul id="5c3a944e-0cfa-4e0c-b5fa-0eb3324d803c" class="bulleted-list"><li style="list-style-type:square">&lt;フォルダタイプ(列挙型)&gt;は、EnvironmentSpecialFolder列挙型があるから、それを指定する。<ul id="b35faf52-a95c-4d70-84c8-d6eceb2b9099" class="bulleted-list"><li style="list-style-type:disc"><a href="http://msdn.microsoft.com/ja-jp/library/System.environment.specialfolder(v=vs.110).aspx">http://msdn.microsoft.com/ja-jp/library/System.environment.specialfolder(v=vs.110).aspx</a></li></ul></li></ul></li></ul><ul id="f1087a62-bfae-459a-9b51-412c7587273f" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0fa947b2-8c25-4299-9de0-64a9c1b15dae" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; [Environment]::GetFolderPath([Environment+SpecialFolder]::Desktop)
+C:\Users\hirok\OneDrive\デスクトップ
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul><ul id="6a7acfe5-8a7a-49f2-9239-b791b08a99f2" class="bulleted-list"><li style="list-style-type:disc">環境変数を取得する<ul id="d5b0fbf6-9b84-4754-8ea9-a1f4358d1958" class="bulleted-list"><li style="list-style-type:circle">構文：Get-ChildItem Env:&lt;環境変数名&gt;<ul id="4b93f578-2e95-4c74-b1ce-9df63ebc426b" class="bulleted-list"><li style="list-style-type:square">「Get-ChildItem Env:」のみだと全ての環境変数の一覧が取得できる</li></ul></li></ul><ul id="ae8c0638-c580-4f6f-aeba-4e70f46e6a62" class="bulleted-list"><li style="list-style-type:circle">実行例<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2fdfe374-4b6f-4351-8156-48e9c16138e7" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; Get-ChildItem Env:Path
+
+Name                           Value
+----                           -----
+Path                           C:\Program Files\Common Files\Oracle\Java\javapath;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\Ope...
+
+
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

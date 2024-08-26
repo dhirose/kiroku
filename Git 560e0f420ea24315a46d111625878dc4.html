@@ -1,0 +1,726 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Git</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="560e0f42-0ea2-4315-a46d-111625878dc4" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="icons8-git-240.png"/></div><h1 class="page-title">Git</h1><p class="page-description"></p></header><div class="page-body"><h1 id="85aaf809-0012-4b61-8c8c-f9f98e28f28c" class="">事前準備</h1><h2 id="07314d28-26ed-41f0-a790-0fd47b224a09" class="">Gitのインストール</h2><p id="3d4cba88-420f-4092-af73-a00a6995c96f" class="">インストール時の注意点のみ記載</p><p id="3c1bdef5-d679-4317-9abe-30629b519ba7" class="">「Configuring the line ending conversions」にチェックを入れる。</p><p id="22e0cbd3-3c80-4c0e-8b29-b3ca181cb88c" class="">チェックアウト時にLFをCRLFにして、プッシュ時にCRLFをLFにしてくれる</p><figure id="be90d8d3-766d-41bb-971c-60ef74704d13" class="image"><a href="image.png"><img style="width:746px" src="image.png"/></a></figure><p id="f5f014fa-0e51-4859-88f5-c0b91e95fbd6" class="">
+</p><p id="c6bf9a52-df0a-4b2e-9a0e-f94e84e09b70" class="">両方チェックを入れる</p><figure id="73590354-3d96-48fb-a56d-4dc7914e8b25" class="image"><a href="image%201.png"><img style="width:747px" src="image%201.png"/></a></figure><p id="d75c54ae-7b39-4ecc-8c8a-a555fbda6385" class="">
+</p><h2 id="296d8880-28c4-4fe5-b5aa-d1d6f7ccd896" class="">TortoiseGitのインストール</h2><p id="c8a83b4d-1497-446d-9cbe-1b7086f5eb5d" class=""><a href="https://sukkiri.jp/technologies/devtools/git/tortoisegit_win.html">https://sukkiri.jp/technologies/devtools/git/tortoisegit_win.html</a></p><h2 id="ddd58d3e-80e3-4a98-9b1b-e441a332b6f7" class="">GitHubへの接続設定</h2><ol type="1" id="782ff631-3e47-45d3-afa8-b2c4ae55cb66" class="numbered-list" start="1"><li>ユーザー名とメールアドレスを設定する<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="982a058f-82f5-4581-91c8-502040daaebf" class="code"><code class="language-PowerShell">C:\Users\hirok&gt; git config --global user.name &quot;dhirose&quot;
+C:\Users\hirok&gt; git config --global user.email &quot;************@gmail.com&quot;
+C:\Users\hirok&gt; git config --list
+diff.astextplain.textconv=astextplain
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+http.sslbackend=openssl
+http.sslcainfo=C:/Program Files/Git/mingw64/etc/ssl/certs/ca-bundle.crt
+core.autocrlf=true
+core.fscache=true
+core.symlinks=true
+pull.rebase=false
+credential.helper=manager
+credential.https://dev.azure.com.usehttppath=true
+init.defaultbranch=master
+user.name=dhirose
+user.email=************@gmail.com
+difftool.sourcetree.cmd=&#x27;C:/Program Files/WinMerge/WinMergeU.exe&#x27; &quot;$LOCAL&quot; &quot;$REMOTE&quot;
+mergetool.sourcetree.cmd=&#x27;&#x27;
+mergetool.sourcetree.trustexitcode=true
+core.editor=&quot;C:\Users\hirok\AppData\Local\Programs\Microsoft VS Code\bin\code&quot; --wait
+C:\Users\hirok&gt;</code></pre><p id="fb44ca36-423e-4d7e-ba7e-354700aba4bd" class="">
+</p><p id="ef26b30d-d470-4615-b0df-0ee92a4ff98b" class="">※設定は.gitconfigファイルに書かれる</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="65f3e3a7-b44f-44b5-b0e7-90805bd25af6" class="code"><code class="language-PowerShell">C:\Users\hirok&gt; Get-Content ~/.gitconfig
+[user]
+        name = dhirose
+        email = hiroki.940920@gmail.com
+[difftool &quot;sourcetree&quot;]
+        cmd = &#x27;C:/Program Files/WinMerge/WinMergeU.exe&#x27; \&quot;$LOCAL\&quot; \&quot;$REMOTE\&quot;
+[mergetool &quot;sourcetree&quot;]
+        cmd = &quot;&#x27;&#x27; &quot;
+        trustExitCode = true
+[core]
+        editor = \&quot;C:\\Users\\hirok\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\&quot; --wait
+C:\Users\hirok&gt;</code></pre><p id="419f697b-2c61-4e52-af40-b2b7b193cb25" class="">
+</p></li></ol><ol type="1" id="fd721578-beca-42ec-b254-22ef303a90fa" class="numbered-list" start="2"><li>認証設定をする<ol type="a" id="e8d9a2bc-e1a6-49e1-abfc-adf7be04a997" class="numbered-list" start="1"><li>sshで接続する場合<ol type="i" id="f927aed2-e2d4-41e3-a843-c5c162e0d346" class="numbered-list" start="1"><li>参考サイト<ol type="1" id="2663ed4d-c38d-43b0-8486-fa87f15c9e40" class="numbered-list" start="1"><li><a href="https://www.kagoya.jp/howto/it-glossary/develop/github_ssh/">https://www.kagoya.jp/howto/it-glossary/develop/github_ssh/</a></li></ol></li></ol></li></ol><ol type="a" id="96180944-ec5a-4880-ae68-aa0a56c45c1e" class="numbered-list" start="2"><li>Personal access tokens(アクセストークン)で接続する場合<ol type="i" id="29296384-80ff-496f-94ca-ecb646110c74" class="numbered-list" start="1"><li>参考サイト<ol type="1" id="ed4d5bef-befc-41af-b367-6a57f048fa6e" class="numbered-list" start="1"><li><a href="https://dev.classmethod.jp/articles/github-personal-access-tokens/">https://dev.classmethod.jp/articles/github-personal-access-tokens/</a></li></ol><ol type="1" id="049ccbdc-5ec1-44b1-944c-58e418cbc172" class="numbered-list" start="2"><li><a href="https://rfs.jp/server/git/github/personal_access_tokens.html">https://rfs.jp/server/git/github/personal_access_tokens.html</a></li></ol></li></ol></li></ol><p id="c02fe3bc-25ae-4a5f-8d4f-b2ffedd72c94" class=""><mark class="highlight-yellow_background">sshのほうは毎回パスワードを入力しなくてよいため、アクセストークン方式よりおすすめ</mark></p></li></ol><p id="70010afc-514c-41a5-a883-67aa0c2f0880" class="">
+</p><h2 id="674f7452-f92f-4907-b1e4-0576de74f458" class="">PowerShellのGitを見やすくする（任意）</h2><p id="5d708284-0e20-4a2c-97e7-f247a5e9c27a" class="">以下のように、タブ補完や変更が見やすくなる</p><figure id="fbe3863e-2b4b-4ba6-b34f-3f48d1266099" class="image"><a href="image%202.png"><img style="width:464px" src="image%202.png"/></a></figure><p id="19199732-fb3d-4e5f-8f00-04887fed15ef" class="">以下の手順を行う</p><ol type="1" id="8a4465b9-a6e9-498a-8900-eadc389003c6" class="numbered-list" start="1"><li><a href="PowerShell%20Core%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88%E4%BB%BB%E6%84%8F%EF%BC%89%20f318139f5bdf4f2dbf652b908bc12bbe.html"><img class="icon" src="icons8-powershell-240%208.png"/>PowerShell Coreのインストール（任意）</a> </li></ol><ol type="1" id="f4c5196b-08d2-45ff-b6c6-c16911f584e9" class="numbered-list" start="2"><li><a href="posh-git%E3%83%A2%E3%82%B7%E3%82%99%E3%83%A5%E3%83%BC%E3%83%AB%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88%E4%BB%BB%E6%84%8F%EF%BC%89%20c3ba562583ee45eaa85b99bccffea499.html"><img class="icon" src="icons8-powershell-240%209.png"/>posh-gitモジュールのインストール（任意）</a> </li></ol><h1 id="3875d78b-6e0c-459a-a435-c6ad7a8d7a27" class="">用語</h1><ul id="2485c091-7ffa-4512-8ae7-c27dfd8335b8" class="bulleted-list"><li style="list-style-type:disc">init<ul id="85c845cc-e38a-4788-a8a7-b0b37cb3d660" class="bulleted-list"><li style="list-style-type:circle">初期化。Gitではリポジトリを作成する行為。</li></ul></li></ul><ul id="765abb98-5ed6-49c4-974a-120ec1c2842f" class="bulleted-list"><li style="list-style-type:disc">clone<ul id="e6c50094-4a36-4cc4-abec-78240df041e1" class="bulleted-list"><li style="list-style-type:circle">リポジトリのコピーを作成する。</li></ul></li></ul><ul id="5b16b406-7f13-46e8-93f4-7453c6731964" class="bulleted-list"><li style="list-style-type:disc">fork(フォーク)<ul id="c2558fdf-cfb5-49cb-bde1-ca025783b032" class="bulleted-list"><li style="list-style-type:circle">GitでなくGitHubの機能。他人のGitHubのリポジトリをGitHub上でクローン出来る。</li></ul></li></ul><ul id="aaa960d3-7afb-4867-8ed9-46f23b721fe2" class="bulleted-list"><li style="list-style-type:disc">fetch<ul id="a8f8f375-3734-4cc4-9ee4-6050b6544ac3" class="bulleted-list"><li style="list-style-type:circle">リモートリポジトリの変更をローカルリポジトリに持ってくる。</li></ul></li></ul><ul id="2d5f8df8-cafa-4441-863c-ba89b3bc23cc" class="bulleted-list"><li style="list-style-type:disc">rebase(リベース)<ul id="d01419cb-52d1-4a49-95f2-b50cf6b2fb78" class="bulleted-list"><li style="list-style-type:circle">マージの一種。マージの際に過去のコミットを修正する。</li></ul></li></ul><ul id="8057ddd7-ff06-4f33-aa43-42c63970df5b" class="bulleted-list"><li style="list-style-type:disc">checkout<ul id="2a28c411-71ac-4211-96bd-2b78a688c329" class="bulleted-list"><li style="list-style-type:circle">ブランチを切り替える行為。</li></ul></li></ul><ul id="5649dafd-f608-408b-9a34-10cf820748cb" class="bulleted-list"><li style="list-style-type:disc">tag<ul id="d4be393a-bfad-460d-be47-5439f2c20d0d" class="bulleted-list"><li style="list-style-type:circle">コミット（リビジョン）に名前を付ける。プロダクトのリリース時に名前を付けて管理する。</li></ul></li></ul><ul id="266bd9c9-9259-4f0e-8800-5895dbe748af" class="bulleted-list"><li style="list-style-type:disc">staging<ul id="3e258255-5a1d-4180-ab08-403efef66640" class="bulleted-list"><li style="list-style-type:circle">ワーキングツリーからステージングエリアに変更を登録する。</li></ul></li></ul><ul id="a660836e-16ad-4309-a363-a17eddd9eb50" class="bulleted-list"><li style="list-style-type:disc">stash（スタッシュ）<ul id="005ed545-34a7-4d8f-ac5e-61779a98cacb" class="bulleted-list"><li style="list-style-type:circle">コミット前の変更を一時避難する行為。</li></ul></li></ul><ul id="b27e2d90-5789-4dd5-9251-b3b0e8f318ab" class="bulleted-list"><li style="list-style-type:disc">conflict<ul id="a6d18145-cb17-4911-8ff2-04357f09769e" class="bulleted-list"><li style="list-style-type:circle">競合。同じファイルの同じ行を修正した際に起こる。</li></ul></li></ul><p id="b62e46f3-617d-4b0c-88fe-7772512c3aac" class="">
+</p><h1 id="f61e3159-6dcb-4387-b858-c5ee4349a2b7" class="">コマンド</h1><table id="eaee079f-4df0-4127-872a-8b8ccddd7181" class="simple-table"><thead class="simple-table-header"><tr id="78050a1a-0a6a-4082-b80d-9dd4e4db59f3"><th id="LI&lt;d" class="simple-table-header-color simple-table-header">分類1</th><th id="fIYC" class="simple-table-header-color simple-table-header">分類2</th><th id="FriI" class="simple-table-header-color simple-table-header">コマンド</th><th id="s~=L" class="simple-table-header-color simple-table-header">説明</th><th id="jEym" class="simple-table-header-color simple-table-header">備考</th></tr></thead><tbody><tr id="2cc7874c-fb00-4985-a1d4-0d37ff137264"><td id="LI&lt;d" class="">git</td><td id="fIYC" class="">config</td><td id="FriI" class="">git config --list</td><td id="s~=L" class="">設置値の取得</td><td id="jEym" class=""></td></tr><tr id="a68207d7-1380-4750-9fec-49d48b8dde73"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git config --global user.name &quot;d-hirose”</td><td id="s~=L" class="">ユーザー名の設定</td><td id="jEym" class=""></td></tr><tr id="cf221a15-6994-4851-8e1a-19dd266ce46d"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git config --global user.email &quot;hiroki.940920@gmail.com”</td><td id="s~=L" class="">パスワードの設定</td><td id="jEym" class=""></td></tr><tr id="9085cd46-39e6-4e5c-af1f-4abb27af6210"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">init</td><td id="FriI" class="">git init</td><td id="s~=L" class="">リポジトリ作成</td><td id="jEym" class=""></td></tr><tr id="0d507a73-dd57-4b95-8bf6-240ccf1b2919"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">add</td><td id="FriI" class="">git add [ファイル名]</td><td id="s~=L" class="">ファイルをステージングする</td><td id="jEym" class=""></td></tr><tr id="77f9415f-7755-43d1-b186-1cac322a255e"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git add .</td><td id="s~=L" class="">カレントディレクトリのファイル全てをステージングする。（サブディレクトリ含め再帰的に事項される）</td><td id="jEym" class=""></td></tr><tr id="c33db500-5931-4861-b207-f70ef26e641a"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">commit</td><td id="FriI" class="">git commit -m “コミットメッセージ”</td><td id="s~=L" class="">引数にコミットメッセージを付けてコミットする</td><td id="jEym" class=""></td></tr><tr id="a70e96ff-48d5-4525-a8a0-7eff53ff0f6e"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git commit</td><td id="s~=L" class="">エディタを開いてメッセージを付けてコミットする</td><td id="jEym" class=""></td></tr><tr id="e164203d-7801-4811-acfe-7336abfcd02e"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">remote</td><td id="FriI" class="">git remote origin [URL]</td><td id="s~=L" class="">リモートリポジトリを追加する</td><td id="jEym" class=""></td></tr><tr id="a33f6910-6e56-431f-b3f8-f199e49ad20a"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">branch</td><td id="FriI" class="">git branch -m [新しいブランチ名]</td><td id="s~=L" class="">今のブランチ名を変更する</td><td id="jEym" class=""></td></tr><tr id="9ae127e5-37ad-46e4-8cdb-d144c0be86cd"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git branch -m [古いブランチ名] [新しいブランチ名]</td><td id="s~=L" class="">ブランチ名を変更する</td><td id="jEym" class=""></td></tr><tr id="4753751f-a623-49fa-bd6e-0c7c439dff46"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git branch</td><td id="s~=L" class="">ブランチの一覧を取得する</td><td id="jEym" class=""></td></tr><tr id="51cc0d96-7c38-4d01-968d-5b4b86cfd26c"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git branch [ブランチ名]</td><td id="s~=L" class="">ブランチを作成する</td><td id="jEym" class=""></td></tr><tr id="af2e76c0-a74b-4b7d-92a9-3c1d0729631b"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">push</td><td id="FriI" class="">git push origin [ブランチ名]</td><td id="s~=L" class="">プッシュする</td><td id="jEym" class=""></td></tr><tr id="9b9203dc-a68e-4db7-9821-9e0dbe7f6e03"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git push -u origin [ブランチ名]</td><td id="s~=L" class="">自動的にリモートブランチを指定する引数を省略してくれるようにする設定。次回からは「git push」でプッシュができる</td><td id="jEym" class=""></td></tr><tr id="6fe0e15f-e56d-405d-b6f7-6b7731b49519"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">clone</td><td id="FriI" class="">git clone [URL]</td><td id="s~=L" class="">リモートリポジトリをローカルにクローンする</td><td id="jEym" class=""></td></tr><tr id="ad8e82cf-e59c-4832-a141-99f12a8ce91f"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">switch</td><td id="FriI" class="">git switch [ブランチ名]</td><td id="s~=L" class="">ブランチを切り替える</td><td id="jEym" class=""></td></tr><tr id="23c7a287-f0f2-4c58-b9f0-3bd3fcfa4b99"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git switch -c [ブランチ名]</td><td id="s~=L" class="">ブランチを作成して、切り替える</td><td id="jEym" class=""></td></tr><tr id="025b50bc-d2b6-4d32-8b19-fced1ac3f6cd"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">merge</td><td id="FriI" class="">git merge [ブランチ名]</td><td id="s~=L" class="">現在いるブランチに指定したブランチをマージする</td><td id="jEym" class=""></td></tr><tr id="9a3955ef-7b2c-48da-8502-6d6a147bbdd2"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">status</td><td id="FriI" class="">git status</td><td id="s~=L" class="">リポジトリの状態を確認する</td><td id="jEym" class=""></td></tr><tr id="ad54522d-4f92-40cb-9946-b661d9f17aad"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">diff</td><td id="FriI" class="">git diff</td><td id="s~=L" class="">ワーキングツリーとインデックスエリア（ステージング）の差分を確認する</td><td id="jEym" class=""></td></tr><tr id="fe7e40eb-4f72-46c3-821e-e9354343f294"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git diff —cached</td><td id="s~=L" class="">インデックスエリア（ステージング）とローカルリポジトリの差分を確認する</td><td id="jEym" class=""></td></tr><tr id="29cc891a-dfc4-4b0f-86f6-86008ffb0d79"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git diff —staged</td><td id="s~=L" class="">〃</td><td id="jEym" class=""></td></tr><tr id="83749ed3-fff6-49d0-8c28-3ab21ddf86c9"><td id="LI&lt;d" class=""></td><td id="fIYC" class="">log</td><td id="FriI" class="">git log</td><td id="s~=L" class="">コミットログを確認する</td><td id="jEym" class=""></td></tr><tr id="5ed8fbb6-1c93-4494-9017-e0edcf238d89"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git log —oneline</td><td id="s~=L" class="">コミットログを省略して確認する</td><td id="jEym" class=""></td></tr><tr id="3204524e-f532-459f-9ff3-bcbea767e1a6"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">git log -p [ファイル名]</td><td id="s~=L" class="">指定したファイルのコミットログを確認する</td><td id="jEym" class=""></td></tr><tr id="1bc1bff8-8df2-448c-abc7-7406d1d65f12"><td id="LI&lt;d" class="">Linux</td><td id="fIYC" class=""></td><td id="FriI" class="">touch</td><td id="s~=L" class="">ファイルを作成する</td><td id="jEym" class=""></td></tr><tr id="82224c00-1894-4d75-b638-d5601746c7c6"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class="">mkdir [ディレクトリ名]</td><td id="s~=L" class="">ディレクトリ作成</td><td id="jEym" class=""></td></tr><tr id="dd7179d3-2da6-4398-ae1d-47b23baf1974"><td id="LI&lt;d" class=""></td><td id="fIYC" class=""></td><td id="FriI" class=""></td><td id="s~=L" class=""></td><td id="jEym" class=""></td></tr></tbody></table><p id="a1aa778a-e3a7-423e-b849-6d191d6d5761" class="">
+</p><p id="59397007-4fda-4d90-b7d4-197e21b4d0f4" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

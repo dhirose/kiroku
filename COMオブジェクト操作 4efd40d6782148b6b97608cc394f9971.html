@@ -1,0 +1,821 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>COMオブジェクト操作</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4efd40d6-7821-48b6-b976-08cc394f9971" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="icons8-powershell-240%2016.png"/></div><h1 class="page-title">COMオブジェクト操作</h1><p class="page-description"></p></header><div class="page-body"><ul id="6164151b-d041-4442-9453-f020fd8f25a0" class="bulleted-list"><li style="list-style-type:disc">ProdID<table id="54e24313-0206-4bdb-a54d-7df2c8598e3b" class="simple-table"><thead class="simple-table-header"><tr id="dec7027b-aabd-4b85-8e4a-45cdfac50fdc"><th id="omzt" class="simple-table-header-color simple-table-header">アプリケーション</th><th id="|c;D" class="simple-table-header-color simple-table-header">ProgID</th></tr></thead><tbody><tr id="ffe8db28-ff86-451a-a39d-a84966c8333d"><td id="omzt" class="">Microsoft Access</td><td id="|c;D" class="">Access.Application</td></tr><tr id="6107016c-7c00-4647-9d8c-0e2b0226ee6c"><td id="omzt" class="">Microsoft Excel</td><td id="|c;D" class="">Excel.Application</td></tr><tr id="4488ea83-9795-4fc9-904d-b43ff9e98aa1"><td id="omzt" class="">Microsoft Outlook</td><td id="|c;D" class="">Outlook.Application</td></tr><tr id="242a08f5-01df-4b20-b18d-670037c4b0f1"><td id="omzt" class="">Microsoft PowerPoint</td><td id="|c;D" class="">Powerpoint.Application</td></tr><tr id="37eea166-b976-4ba4-9945-0b3a7c597a8d"><td id="omzt" class="">Microsoft Word</td><td id="|c;D" class="">Word.Application</td></tr><tr id="4c8d2198-0069-4c4a-a06f-ed1e116631f4"><td id="omzt" class="">Microsoft FrontPage</td><td id="|c;D" class="">FrontPage.Application</td></tr></tbody></table></li></ul><ul id="d1dcd937-4bbf-4701-83f1-a943d432499b" class="bulleted-list"><li style="list-style-type:disc">COMオブジェクトの取得<ul id="0bb42cf2-350f-4e9d-8b9f-0a0db6b1c8bd" class="bulleted-list"><li style="list-style-type:circle">構文：New-Object -Com &lt;ProdID&gt;<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37120280-050b-4f55-a9fb-d63c9d0e690d" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; $xl = New-Object -Com Excel.Application
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre></li></ul><ul id="ffa4f135-c5ff-4ed3-8eaa-fff34b9b94c7" class="bulleted-list"><li style="list-style-type:circle">後始末が必要<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3057d5e8-5cae-4b44-b9b2-90e98279722b" class="code"><code class="language-PowerShell">PS C:\Users\hirok\!work\powerShell&gt; $xl.Quit
+
+OverloadDefinitions
+-------------------
+void Quit()
+void _Application.Quit()
+
+
+
+PS C:\Users\hirok\!work\powerShell&gt; [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)
+PS C:\Users\hirok\!work\powerShell&gt;</code></pre><ul id="5516c344-85a1-4a25-9105-0f737b4a7358" class="bulleted-list"><li style="list-style-type:square">$xl.Quit<ul id="7b98177c-80c2-4130-a4e8-af1fce302c28" class="bulleted-list"><li style="list-style-type:disc">Excelアプリケーションの終了</li></ul></li></ul><ul id="e7b98e79-2a51-43fb-b91e-fb4a82c57e9e" class="bulleted-list"><li style="list-style-type:square">[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)<ul id="62c66420-ce11-40c7-969f-a1742f28c52a" class="bulleted-list"><li style="list-style-type:disc">COMオブジェクトの参照の解放</li></ul><ul id="cc2f1430-3ae3-42cb-80ee-651ac4504a5e" class="bulleted-list"><li style="list-style-type:disc">先頭のvoidは戻り値を持たないコマンドにするためのもの。指定しなかった場合、戻り値が画面に出力される。0の場合、コマンドが成功。</li></ul><ul id="92c4fff3-92a0-415e-a0ef-e7517aec8d03" class="bulleted-list"><li style="list-style-type:disc">このコマンドを実行しなかった場合、コンピューター上にこのスクリプトを実行した残骸(使用されなくなったプロセス)が残る。タスクマネージャーから確認できる。（プロセスの「EXCEL.EXEがそれ」）</li></ul></li></ul></li></ul></li></ul><ul id="833b7984-aadf-44c4-b74e-3b966aeed4c9" class="bulleted-list"><li style="list-style-type:disc">Excelファイルを読み込む<ul id="37b9130f-414e-4ea3-b560-d57d1ceda0a4" class="bulleted-list"><li style="list-style-type:circle">参考スクリプト<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5fd17b9c-e49f-434d-8c2f-8778b17ab567" class="code"><code class="language-PowerShell">$xlfile = &quot;C:\Users\hirok\!work\test.xlsx&quot;
+
+# Excelアプリケーションのインスタンスを生成する
+$xl = New-Object -Com Excel.Application
+
+# Excelアプリケーションを表示する
+$xl.Visible = $true
+
+# Excelファイルを開く
+$wb = $xl.Workbooks.Open($xlfile)
+
+# Sheet1を選択する
+$ws = $wb.Worksheets.Item(&quot;Sheet1&quot;)
+
+# A1セルの内容を画面に表示する
+Write-Host $ws.Cells.Item(1,1).Text
+
+# Excelファイルを閉じる
+$wb.Close()
+
+# Excelアプリケーションを終了する
+$xl.Quit()
+
+# COMオブジェクトの参照を解放する
+[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)</code></pre></li></ul><ul id="7dbf5af4-a832-4612-b78a-a647d5ba464d" class="bulleted-list"><li style="list-style-type:circle">Excelファイルを開く場合<ul id="e4aeeb53-113c-4c78-865b-4ae0545137a2" class="bulleted-list"><li style="list-style-type:square">「$xl.Visible = $true」を設定する<ul id="ddb2a55d-f09a-4a18-a4a7-ad0d3cf21ffe" class="bulleted-list"><li style="list-style-type:disc">Excelファイルを開いてスクリプトが実行されるため、処理時間が延びる</li></ul></li></ul></li></ul><ul id="683c0e97-5664-41a8-b5ca-220da3a6d3bd" class="bulleted-list"><li style="list-style-type:circle">Excelファイルを開かない(バックグランド実行)場合<ul id="d2164701-2436-4fb3-8a62-82920714d3a3" class="bulleted-list"><li style="list-style-type:square">「$xl.Visible = $true」を設定しない。または、$xl.Visible = $falseを設定する</li></ul></li></ul></li></ul><ul id="7d018407-74c2-47c2-a936-909e35320626" class="bulleted-list"><li style="list-style-type:disc">Excelファイルに書き込む<ul id="a3a992d2-cbf6-4884-9b4c-368ce525f550" class="bulleted-list"><li style="list-style-type:circle">あ<ul id="dcd14369-6d1d-46a3-989e-1a5b15e2961c" class="bulleted-list"><li style="list-style-type:square">参考スクリプト<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c3d4bd25-1502-49db-bc51-6e8263a902ff" class="code"><code class="language-PowerShell">$xlfile = &quot;C:\Users\hirok\!work\test.xlsx&quot;
+
+# Excelアプリケーションのインスタンスを生成する
+$xl = New-Object -Com Excel.Application
+
+# Excelアプリケーションを表示する
+# $xl.Visible = $true
+
+# Excelファイルを開く
+$wb = $xl.Workbooks.Open($xlfile)
+
+# Sheet1を選択する
+$ws = $wb.Worksheets.Item(&quot;Sheet1&quot;)
+
+# A2セルの内容を更新する
+$ws.Cells.Item(2,1) = &quot;Hello World!&quot;
+
+# Excelファイルを保存する
+$wb.Save()
+
+# Excelファイルを閉じる
+$wb.Close()
+
+# Excelアプリケーションを終了する
+$xl.Quit()
+
+# COMオブジェクトの参照を解放する
+[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)</code></pre></li></ul></li></ul><ul id="730314b0-8b3b-4a75-b9fc-6fa65f6f43de" class="bulleted-list"><li style="list-style-type:circle">数式を入れる場合<ul id="272e8b76-aa2e-4dc4-a014-4e046e591354" class="bulleted-list"><li style="list-style-type:square">「$ws.Cells.Item(2,1) = “=NOW()&quot;」のように記載する（現在日時を入れる）</li></ul></li></ul><ul id="6b595486-bcc2-4d70-86b3-a6b470101eba" class="bulleted-list"><li style="list-style-type:circle">新たなExcelファイルとして保存する場合<ul id="f8c1398a-6d90-4623-a7b3-141fe15ac9a8" class="bulleted-list"><li style="list-style-type:square">「$wb.Save()」を「$wb.SaveAs([ref]”C:\Users\hirok\!work\test2.xlsx”)」のようにすると新たなExcelファイルで保存できる。</li></ul><ul id="cbc047a8-37d7-4131-910d-3e2e9f606599" class="bulleted-list"><li style="list-style-type:square">SaveAsメソッドは「名前を付けて保存」に該当する。そのため、すでにファイルが存在する場合、上書きのメッセージが表示される。上書きのメッセージを表示させないようにするには「$xl.DisplayAlerts = $false」を設定する。PawerShellスクリプト上から一切操作によるメッセージを表示しないようにしたい場合は、COMオブジェクトを参照した直後、すぐにDisplayAlertsプロパティを$falseに設定するとよい。<figure id="bfa57b8b-0c48-4e7e-9e98-3358a23fba69" class="image"><a href="image%2045.png"><img style="width:411px" src="image%2045.png"/></a></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="22a433a4-99d7-430a-8205-d6dd946840b2" class="code"><code class="language-PowerShell">$xlfile = &quot;C:\Users\hirok\!work\test.xlsx&quot;
+
+# Excelアプリケーションのインスタンスを生成する
+$xl = New-Object -Com Excel.Application
+
+# Excelアプリケーションを表示する
+# $xl.Visible = $true
+
+# Excelファイルを開く
+$wb = $xl.Workbooks.Open($xlfile)
+
+# Sheet1を選択する
+$ws = $wb.Worksheets.Item(&quot;Sheet1&quot;)
+
+# A2セルの内容を更新する
+$ws.Cells.Item(2,1) = &quot;Hello World!&quot;
+
+# Excelファイルを保存する
+# $wb.Save()
+# Excelアプリケーションのメッセージを抑制する
+$xl.DisplayAlerts = $false
+# Excelファイルを新たなファイルとして保存する
+$wb.SaveAs([ref]”C:\Users\hirok\!work\test2.xlsx”)
+
+# Excelファイルを閉じる
+$wb.Close()
+
+# Excelアプリケーションを終了する
+$xl.Quit()
+
+# COMオブジェクトの参照を解放する
+[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)</code></pre></li></ul></li></ul><ul id="5c800fd9-89b8-4e34-99bf-06aacfea5977" class="bulleted-list"><li style="list-style-type:circle">ファイル形式を変換して保存する<ul id="14b96833-31a7-4030-8b21-da625e11d40e" class="bulleted-list"><li style="list-style-type:square">SaveAsメソッドのパラメータにファイル形式を指定する<ul id="532f0737-c352-4541-b5b7-6fc44e9c0a85" class="bulleted-list"><li style="list-style-type:disc">参考コード：$wb.SaveAs([ref]”C:\Users\hirok\!work\test2.csv”,6) # 6はCSV形式</li></ul><ul id="13d57e45-e39c-428f-9e69-0eb3eb09bc2a" class="bulleted-list"><li style="list-style-type:disc">設定できる値は、XlFileFormat列挙体に定義されている<ul id="2d2bc8c4-93b9-4042-95c6-3ac4907bdb33" class="bulleted-list"><li style="list-style-type:circle"><a href="http://msdn.microsoft.com/ja-jp/library/office/ff198017(v=office.15).aspx">http://msdn.microsoft.com/ja-jp/library/office/ff198017(v=office.15).aspx</a></li></ul></li></ul></li></ul></li></ul><ul id="1cfef0c1-9af3-4cc4-b149-826e2a60f8ed" class="bulleted-list"><li style="list-style-type:circle">Excelファイルを新規作成する<ul id="64672726-cdba-410a-bb01-8d85aa4470ef" class="bulleted-list"><li style="list-style-type:square">WorkbooksクラスのAddメソッドを実行して、Excelファイルを新規作成する<ul id="9353407d-bad9-4c9f-b3df-24213c4ee7fb" class="bulleted-list"><li style="list-style-type:disc">$wb = $xl.Workbooks.Add()</li></ul></li></ul><ul id="f5390937-0755-45fc-bd21-3e00e82c3fea" class="bulleted-list"><li style="list-style-type:square">参考スクリプト<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c3165ea8-57ea-482d-ad85-5c4f07ca2db0" class="code"><code class="language-PowerShell"># Excelアプリケーションのインスタンスを生成する
+$xl = New-Object -Com Excel.Application
+
+# Excelファイルを作成し、そのオブジェクトを変数$wbに格納する
+$wb = $xl.Workbooks.Add()
+
+# Sheet1を選択する
+$ws = $wb.Worksheets.Item(&quot;Sheet1&quot;)
+
+# A1セルの内容を更新する
+$ws.Cells.Item(1,1) = &quot;Hello World!&quot;
+
+# Excelファイルを新たなファイルとして保存する
+$wb.SaveAs([ref]”C:\Users\hirok\!work\test2.xlsx&quot;)
+
+# Excelファイルを閉じる
+$wb.Close()
+
+# Excelアプリケーションを終了する
+$xl.Quit()
+
+# COMオブジェクトの参照を解放する
+[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)</code></pre></li></ul></li></ul><ul id="084932e4-2d6f-4a70-bc2b-bf9579cbe3f6" class="bulleted-list"><li style="list-style-type:circle">Excelファイルを印刷する<ul id="da888160-6073-49b7-a628-46367a6749bb" class="bulleted-list"><li style="list-style-type:square">ExcelシートのPrintOutメソッドを実行する。<ul id="2d0e67fe-11aa-4fe7-9c25-a5f798728a07" class="bulleted-list"><li style="list-style-type:disc">$ws.PrintOut()</li></ul></li></ul><ul id="5f032193-1f7b-4606-aa0b-6aeca99ac8b6" class="bulleted-list"><li style="list-style-type:square">参考スクリプト<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="64a3dab0-1d36-4fc1-9c5e-ff0305775771" class="code"><code class="language-PowerShell"># Excelアプリケーションのインスタンスを生成する
+$xl = New-Object -Com Excel.Application
+
+# Excelファイルを開く
+$wb = $xl.Workbooks.Open($xlfile)
+
+# Sheet1を選択する
+$ws = $wb.Worksheets.Item(&quot;Sheet1&quot;)
+
+# Sheet1を印刷する
+$ws.PrintOut()
+
+# Excelファイルを閉じる
+$wb.Close()
+
+# Excelアプリケーションを終了する
+$xl.Quit()
+
+# COMオブジェクトの参照を解放する
+[void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($xl)</code></pre></li></ul></li></ul><ul id="290ba56b-74cc-409a-b210-3a89df421ac0" class="bulleted-list"><li style="list-style-type:circle">Excelマクロを実行する<ul id="51616e17-1a24-405b-b046-bb24fec2708b" class="bulleted-list"><li style="list-style-type:square">ExcelアプリケーションのRunメソッドを実行する。<ul id="7bc97d09-600d-4760-855f-1bc290740112" class="bulleted-list"><li style="list-style-type:disc">$xl.Run(”パラメータ”)</li></ul></li></ul><ul id="f25ec227-4fd1-4232-852d-84c243179d82" class="bulleted-list"><li style="list-style-type:square">※使用頻度はそんなになさそうだから、とりあえずメモ。必要であればその時にまた調べる</li></ul></li></ul><ul id="edb5db1e-ad1e-4f35-8db8-7f8110e15e48" class="bulleted-list"><li style="list-style-type:circle">Word関連の操作<ul id="b3a2a478-b6d9-4920-a911-1ea902f28ffd" class="bulleted-list"><li style="list-style-type:square">※使用頻度はそんなになさそうだから、必要であればその時にまた調べる</li></ul><ul id="156ecfee-b168-421d-82b2-4beb3587ffa7" class="bulleted-list"><li style="list-style-type:square">※テキストを見た感じ、やっていることはExcel操作の時とほぼ同じ。</li></ul></li></ul></li></ul><p id="74b14f72-2095-4440-8e70-bfcb53e38334" class="">
+</p><p id="a527f534-c30b-4141-b456-63c425a1be3d" class="">
+</p><p id="2755b9ae-d386-42e1-b976-ca21da9d39eb" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

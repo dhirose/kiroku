@@ -1,0 +1,688 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>PowerShell</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f1626780-8a11-4050-a8bb-312ec4c2c748" class="page sans"><header><div class="page-header-icon undefined"><img class="icon" src="icons8-powershell-240.png"/></div><h1 class="page-title">PowerShell</h1><p class="page-description"></p></header><div class="page-body"><h1 id="a0dcd988-5a17-47f0-92ab-89ff35c4b240" class="">特徴</h1><ul id="8f548bbf-d0c2-462d-b88b-ee5cbb60e05b" class="bulleted-list"><li style="list-style-type:disc">PowerShellで作ったスクリプトを実行するには、初期設定が必要</li></ul><ul id="b6740200-d4d7-4e65-bd58-3f61526030ee" class="bulleted-list"><li style="list-style-type:disc">コマンドプロンプトと違い、実行結果がオブジェクトで返る<ul id="766a8fa7-0077-4c12-b32d-64aab2232e9a" class="bulleted-list"><li style="list-style-type:circle">コマンドプロンプトはテキストで返る</li></ul></li></ul><ul id="3bebbd4d-6764-4bd9-8db9-8c7584978a35" class="bulleted-list"><li style="list-style-type:disc">.NET Frameworkのライブラリが使える<ul id="6d74d50c-cd4d-4d81-a8f6-19fc5694ec4d" class="bulleted-list"><li style="list-style-type:circle"><a href="https://wa3.i-3-i.info/word13559.html">https://wa3.i-3-i.info/word13559.html</a></li></ul></li></ul><ul id="e64d53b2-15db-4dbd-a143-189cad8d0a6b" class="bulleted-list"><li style="list-style-type:disc">COM(Componet Object Model)が使える</li></ul><ul id="c1f51190-2da5-45cb-9ba8-500dd4babd91" class="bulleted-list"><li style="list-style-type:disc">WMI(Windows Management Instrumentation)が使える</li></ul><h1 id="520af2f1-52b6-4685-bef4-210d3248e0ec" class="">事前準備</h1><figure id="43dd4991-4320-429b-acc5-ff2bf707fffd" class="link-to-page"><a href="%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99%2043dd49914320429bacc5ff2bf707fffd.html"><img class="icon" src="icons8-powershell-240%201.png"/>事前準備</a></figure><h2 id="504892be-0ce1-420e-848c-2d1c32c3e87f" class="">やっておくと便利な設定（任意）</h2><figure id="3e15179f-fac9-459b-809d-131422d43b16" class="link-to-page"><a href="%E4%BE%BF%E5%88%A9%E3%81%AA%E8%A8%AD%E5%AE%9A%203e15179ffac9459b809d131422d43b16.html"><img class="icon" src="icons8-powershell-240%202.png"/>便利な設定</a></figure><h1 id="0a63d0f0-6dc2-426a-a105-071b47fba5f9" class="">実践</h1><h2 id="6042064c-4749-4dcd-8ebb-8dfadfb235fb" class="">コマンドレットの調べ方</h2><figure id="76865e92-42f8-4542-8970-16e946b732c1" class="link-to-page"><a href="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%88%E3%82%99%E3%83%AC%E3%83%83%E3%83%88%E3%81%AE%E8%AA%BF%E3%81%B8%E3%82%99%E6%96%B9%2076865e9242f84542897016e946b732c1.html"><img class="icon" src="icons8-powershell-240%203.png"/>コマンドレットの調べ方</a></figure><h2 id="c1a4c9e6-c122-43eb-b696-55299d00cb02" class="block-color-default_background">主なコマンド操作</h2><figure id="6d91571d-d377-404b-99e2-9ce0e7f168bf" class="link-to-page"><a href="%E3%83%86%E3%82%99%E3%83%BC%E3%82%BF%E6%93%8D%E4%BD%9C%206d91571dd377404b99e29ce0e7f168bf.html"><img class="icon" src="icons8-powershell-240%204.png"/>データ操作</a></figure><figure id="0dd0c4e7-c12f-474f-919b-11275907fca3" class="link-to-page"><a href="%E3%83%A2%E3%82%B7%E3%82%99%E3%83%A5%E3%83%BC%E3%83%AB%E6%93%8D%E4%BD%9C%200dd0c4e7c12f474f919b11275907fca3.html"><img class="icon" src="icons8-powershell-240%205.png"/>モジュール操作</a></figure><h2 id="77fac477-a8d1-49c6-bd1e-18902eae5f61" class="">実践的なコマンド</h2><figure id="616e908c-28e1-4525-9a90-7391336e09bc" class="link-to-page"><a href="%E5%AE%9F%E8%B7%B5%E7%9A%84%E3%81%AA%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%88%E3%82%99%20616e908c28e145259a907391336e09bc.html"><img class="icon" src="icons8-powershell-240%206.png"/>実践的なコマンド</a></figure><h2 id="8fe09ef4-1802-4625-bec4-1ec793eab120" class="">メモ</h2><figure id="03e58d60-e508-448f-bb05-562c1a9affbe" class="link-to-page"><a href="%E3%83%A1%E3%83%A2%2003e58d60e508448fbb05562c1a9affbe.html"><img class="icon" src="icons8-powershell-240%207.png"/>メモ</a></figure><h1 id="fa34d73c-9475-4924-b162-5811ab5fe7b5" class="">コマンド集</h1><table id="2dbfc388-dbb9-4f86-bd73-08f5f6d74564" class="simple-table"><thead class="simple-table-header"><tr id="8109160a-8720-4562-bec9-6e4dc43eb550"><th id="S\&gt;S" class="simple-table-header-color simple-table-header">コマンド</th><th id="[^ED" class="simple-table-header-color simple-table-header">説明</th><th id="|MVO" class="simple-table-header-color simple-table-header">例</th><th id="NCJC" class="simple-table-header-color simple-table-header">備考</th></tr></thead><tbody><tr id="bcd65257-5af3-4273-a9d2-df72ea43f79c"><td id="S\&gt;S" class="">Get-ChildItem</td><td id="[^ED" class="">ファイル、フォルダの一覧を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class="">エイリアス：gci,dir,ls</td></tr><tr id="ca89e634-97e4-4cf5-8562-7c05d96b7c0b"><td id="S\&gt;S" class="">Get-Command</td><td id="[^ED" class="">コマンドレットの一覧を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="683b7927-b75f-4b48-bdae-f0f8e422e24b"><td id="S\&gt;S" class="">Get-Alias</td><td id="[^ED" class=""><em>エイリアスの一覧を取得する</em></td><td id="|MVO" class=""></td><td id="NCJC" class="">エイリアス：gcm</td></tr><tr id="d530e5d2-89b8-4893-b888-a7f674dd4927"><td id="S\&gt;S" class="">New-Alias [エイリアス名] [コマンド]</td><td id="[^ED" class=""><em>エイリアスを作成する</em></td><td id="|MVO" class="">New-Alias hoge Get-ChildItem</td><td id="NCJC" class=""></td></tr><tr id="c133f608-9270-48ce-a7b1-35ca049d1a58"><td id="S\&gt;S" class="">Remove-Item Alias:[エイリアス名]</td><td id="[^ED" class=""><em>エイリアスを削除する</em></td><td id="|MVO" class="">Remove-Item Alias:hoge</td><td id="NCJC" class=""></td></tr><tr id="a7516fb3-c740-4345-9679-9d9da3d80187"><td id="S\&gt;S" class="">Get-PSProvider</td><td id="[^ED" class="">現在のセッションで使用可能なプロバイダーの一覧を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="b03f7c99-a5fb-4966-8b30-95531238b4e3"><td id="S\&gt;S" class="">Select-Object [項目名],[項目名]… </td><td id="[^ED" class="">オブジェクト型のデータ項目を絞り込む</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="414c14f2-5aeb-4aa2-b208-2bd8627a996b"><td id="S\&gt;S" class="">Where-Object</td><td id="[^ED" class="">オブジェクト型のデータ項目に条件を指定して取得する</td><td id="|MVO" class="">Get-ChildItem .\ | Where-Object {$_.Length -gt 50 }</td><td id="NCJC" class="">「{}」はスクリプトブロック。「$_」は、パイプラインを通じたデータを参照するためのシェル変数</td></tr><tr id="726783ff-48b8-4aa8-b8a2-0fd61ed50c4e"><td id="S\&gt;S" class="">Sort-Object [項目名]</td><td id="[^ED" class="">オブジェクト型のデータ項目をソートする</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="45601793-7f3c-47a5-a061-6214593d7581"><td id="S\&gt;S" class="">$PSHOME</td><td id="[^ED" class="">PowerShell.exeが格納されているフォルダを取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="8bc7afc5-a553-4e27-85fe-341bec8d8459"><td id="S\&gt;S" class="">Get-Command [文字列]</td><td id="[^ED" class="">コマンドレットの一覧を取得する</td><td id="|MVO" class="">Get-Command *-Eventlog</td><td id="NCJC" class=""></td></tr><tr id="a7d1f87a-d085-4c8f-a466-44af2fe2983c"><td id="S\&gt;S" class="">Get-Help [コマンド名]</td><td id="[^ED" class="">コマンドレットの使用方法を取得する</td><td id="|MVO" class="">Get-Command Write-Eventlog</td><td id="NCJC" class=""></td></tr><tr id="39119689-5e37-4ec7-8683-d224eb334c6f"><td id="S\&gt;S" class="">Get-ExecutionPolicy</td><td id="[^ED" class="">現在設定されている実行ポリシーを取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="c8e293d2-c864-4247-bad0-3cb1eb6e6c2b"><td id="S\&gt;S" class="">Set-ExecutionPolicy  [実行ポリシー名]</td><td id="[^ED" class="">実行ポリシーを設定する</td><td id="|MVO" class="">Set-ExecutionPolicy  RemoteSigned</td><td id="NCJC" class=""></td></tr><tr id="a8a66e57-f496-4d0a-bd90-4490c40498c7"><td id="S\&gt;S" class="">New-Item</td><td id="[^ED" class="">ファイルやフォルダを作成する</td><td id="|MVO" class="">New-Item -type file -force [ファイル名]</td><td id="NCJC" class=""></td></tr><tr id="52a01cd0-b4b6-4af7-9fa2-a111b24cb42f"><td id="S\&gt;S" class="">ForEach-Object</td><td id="[^ED" class="">パイプで受け取ったオブジェクトをループ処理できる。（foreach構文では、パイプで受け取れない）</td><td id="|MVO" class="">@(&quot;1郎&quot;,&quot;2郎&quot;,&quot;3郎&quot;) | ForEach-Object{$_.ToString()}</td><td id="NCJC" class="">エイリアス：%</td></tr><tr id="9ee5d395-320f-4de2-925e-0aa46c75804f"><td id="S\&gt;S" class="">Get-ChildItem function:</td><td id="[^ED" class="">powerShellの組み込み関数と、ユーザーの独自に定義した関数の一覧を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="85b1a177-36b6-407a-8967-675363f7e7ae"><td id="S\&gt;S" class="">Remove-Item function:[関数名]</td><td id="[^ED" class="">ユーザー定義関数を削除する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="613f909a-db2c-4e15-8953-333a4a47b4d0"><td id="S\&gt;S" class="">Get-WmiObject Win32_LogicalDisk</td><td id="[^ED" class="">コンピューター上のデバイス情報を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="0d453777-164e-4c6c-9b3e-7d852862bc63"><td id="S\&gt;S" class="">Get-History</td><td id="[^ED" class="">コマンドの実行履歴を取得する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr><tr id="587440b6-f153-4eec-91cc-db5ab7af2bb6"><td id="S\&gt;S" class="">Start-Transcript</td><td id="[^ED" class="">そのセッション中に実行されたコマンドをログとしてテキストファイルに出力する</td><td id="|MVO" class=""></td><td id="NCJC" class="">【 保存例】<br/>C:\Users\hirok\OneDrive\ドキュメント\PowerShell_transcript.HIROSE.AwWmIGUC.20240812040938.txt<br/></td></tr><tr id="c1f90d46-2054-4a39-9e59-5e278ec08ba7"><td id="S\&gt;S" class="">Stop-Transcript</td><td id="[^ED" class="">Start-Transcriptコマンドを停止する</td><td id="|MVO" class=""></td><td id="NCJC" class=""></td></tr></tbody></table><h1 id="fa64b4f0-9d17-4011-988b-a1dced189eec" class="">用語集</h1><h2 id="03adcf66-f24a-450b-8280-3546a46e4fb5" class="">PowerShellプロバイダー</h2><ul id="a9285cd7-2076-4cc7-9942-c4519cbd9475" class="bulleted-list"><li style="list-style-type:disc">ファイルシステムやレジストリなどのデータ領域を抽象化する仕組み</li></ul><ul id="68865ac9-ee90-44a8-9f59-54d4d7ee5dd2" class="bulleted-list"><li style="list-style-type:disc"><a href="https://learn.microsoft.com/ja-jp/powershell/module/microsoft.powershell.core/about/about_providers?view=powershell-7.4">https://learn.microsoft.com/ja-jp/powershell/module/microsoft.powershell.core/about/about_providers?view=powershell-7.4</a></li></ul><h2 id="ecca7d64-6193-4a80-83ad-5008e69094b9" class="">PowerShellドライブ</h2><ul id="ffe24f04-f869-47ef-8383-9b0b8a2205f6" class="bulleted-list"><li style="list-style-type:disc">ハードディスク上のドライブにアクセスするのと同様に、パスを使用してPowerShellプロバイダーにアクセスするための仕組み</li></ul><h2 id="05b42356-f53e-439d-810a-e420d030d8a5" class="">コアコマンド</h2><ul id="20be2dbd-4214-4b6b-ae8e-fb614a17dfe4" class="bulleted-list"><li style="list-style-type:disc">PowerShellプロバイダーが使用するために設計されたコマンドレット</li></ul><h2 id="4ded480a-b42a-45ef-bd5c-7739ad096073" class="">UAC</h2><ul id="833958c9-8ab1-4e41-87de-4f84fe6c3ddf" class="bulleted-list"><li style="list-style-type:disc">「User Account Control」の略</li></ul><ul id="9e823759-bb68-4e42-8b2b-2e1bf27f8c85" class="bulleted-list"><li style="list-style-type:disc">管理者権限で実行する機能</li></ul><ul id="c4a978d3-96d0-42ee-bf6c-e64cfe288c6a" class="bulleted-list"><li style="list-style-type:disc"><a href="https://wa3.i-3-i.info/word1159.html">https://wa3.i-3-i.info/word1159.html</a></li></ul><h2 id="ad47bd37-d348-467d-9ccf-8413007926a8" class="">WQL</h2><ul id="e0beddc6-b947-41d6-a767-be9c1493cb80" class="bulleted-list"><li style="list-style-type:disc">WMI用のSQL文</li></ul><h2 id="1b066daa-24ae-4096-b3a5-09e09917df58" class="">COM</h2><ul id="2654c2bf-521d-49be-bdb4-ef8c37169f53" class="bulleted-list"><li style="list-style-type:disc">「Component Object Model」の略</li></ul><ul id="a95f28c5-dff0-43d6-9bd8-037cebcc1b2a" class="bulleted-list"><li style="list-style-type:disc">異なるアプリケーション間でプログラムを利用するための技術</li></ul><ul id="ae9d3b68-39ce-49a0-b85c-b471eea4bb8a" class="bulleted-list"><li style="list-style-type:disc"><a href="https://e-words.jp/w/COM.html">https://e-words.jp/w/COM.html</a></li></ul><h2 id="7cf935a9-715d-43ee-8262-8f1fe2487c09" class="">WMI</h2><ul id="d3708233-f1bd-40e4-981d-45cef35c5c78" class="bulleted-list"><li style="list-style-type:disc">「Windows Management Instrumentation」の略</li></ul><ul id="60b3a41d-43c3-44b4-9f78-224c5906b9f9" class="bulleted-list"><li style="list-style-type:disc"><a href="https://wa3.i-3-i.info/word14903.html">https://wa3.i-3-i.info/word14903.html</a></li></ul><h2 id="e5971a9a-c051-4c1b-994e-d6c97afee9d2" class="">ADO</h2><ul id="ae505445-28e1-4365-a0fb-3d6768dcafb3" class="bulleted-list"><li style="list-style-type:disc">ActiveX Data Objectの略</li></ul><ul id="200c4aec-57bb-46b2-a8d6-631ae21a58f6" class="bulleted-list"><li style="list-style-type:disc">Microsoft者が開発したデータベースを操作するためのCOM</li></ul><ul id="2516a519-59a4-404c-b824-7770a3d662e8" class="bulleted-list"><li style="list-style-type:disc">AccessやSQL Serverを操作できる</li></ul><h2 id="b46d3a2c-3c8d-4a42-8a66-444352f415e6" class="">NuGet</h2><ul id="af5d7678-8c53-4e7c-953a-b824019e58e0" class="bulleted-list"><li style="list-style-type:disc">オープンソースのパッケージマネージャー</li></ul><ul id="58ebe492-165a-4c88-8a9e-730841fffd8e" class="bulleted-list"><li style="list-style-type:disc"><a href="https://freelance.shiftinc.jp/column/nuget">https://freelance.shiftinc.jp/column/nuget</a></li></ul><h2 id="765a99af-369a-4a67-a0e4-9cc88db5855b" class=""><strong>PowerShell Core</strong></h2><ul id="a5a173d9-8d9f-48f8-a9b0-d7521b82c202" class="bulleted-list"><li style="list-style-type:disc">クロスプラットフォーム(Mac OS、Linux OS上でも動作する)を意味する。</li></ul><ul id="2e95fbf7-5a29-44e6-b578-ed508503dd7f" class="bulleted-list"><li style="list-style-type:disc">オープンソースソフトウェア</li></ul><ul id="6525092b-22d4-4400-b93a-3021b9817864" class="bulleted-list"><li style="list-style-type:disc">クロスプラットフォームで動作するPowerShell実装。.NET Coreを使って開発されており、複数のプラットフォームで動作。開発は活発で、今後しばらくは新機能の開発などが積極的に進められる見通し。コマンドはpwsh.exeまたはpwsh。</li></ul><ul id="29873575-4fa4-4d79-bee3-06e6dd3e23cc" class="bulleted-list"><li style="list-style-type:disc">参考：<a href="https://news.mynavi.jp/techplus/article/techp3625/">https://news.mynavi.jp/techplus/article/techp3625/</a></li></ul><h2 id="8875acb9-52f5-4f3a-80a6-98edda87f91e" class=""><strong>Windows PowerShell</strong></h2><ul id="95bc765e-8e6a-469a-b591-33d951c31c58" class="bulleted-list"><li style="list-style-type:disc">WindowsおよびWindows Serverに同梱して出荷されてきた、これまで10年に渡って使われたオリジナルのPowerShell。.NETフレームワークを使って開発されており、Windows専用。開発は終了しており、今後はバグフィックスのみが行われる。コマンドはpowershell.exe。</li></ul><p id="d98f291b-9790-4d34-88c1-0d783f8e552a" class="">
+</p><p id="5694e4c4-f174-4749-badd-1cbdb784856a" class="">
+</p><h1 id="d21a673e-d5e8-429f-ba43-2d4fc7ff593b" class="">参考サイト</h1><ul id="6ce7a9ae-c112-41fc-9e5c-a437effcbc84" class="bulleted-list"><li style="list-style-type:disc">PowerShell公式サイト<ul id="8b2f74a5-fb41-4cbd-aaf0-8048e5dcbca8" class="bulleted-list"><li style="list-style-type:circle">ドキュメントTOP<ul id="e284e976-00cd-4b5f-b1da-787571689e40" class="bulleted-list"><li style="list-style-type:square"><a href="https://learn.microsoft.com/ja-jp/powershell/">https://learn.microsoft.com/ja-jp/powershell/</a></li></ul></li></ul><ul id="24ceb28c-9f2e-4c4d-b893-8c33a1f2c99f" class="bulleted-list"><li style="list-style-type:circle">リファレンス<ul id="65a50508-43c6-4feb-915c-5dd698805ebc" class="bulleted-list"><li style="list-style-type:square"><a href="https://learn.microsoft.com/ja-jp/powershell/module/">https://learn.microsoft.com/ja-jp/powershell/module/</a></li></ul></li></ul></li></ul><ul id="6c3b770e-30e4-44e8-b78d-f0a869cf56ff" class="bulleted-list"><li style="list-style-type:disc">便利なPowerShellコマンドをまとめているブログ<ul id="123c3e64-0fad-428b-962b-c65a1a546c27" class="bulleted-list"><li style="list-style-type:circle"><a href="https://tex2e.github.io/blog/#powershell">https://tex2e.github.io/blog/#powershell</a></li></ul></li></ul><p id="7f8a785c-fbb2-4c6c-9d9b-144a9352d65e" class="">
+</p><p id="e1cefb80-1a2e-4f71-a6ba-aaed83d23ec8" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
